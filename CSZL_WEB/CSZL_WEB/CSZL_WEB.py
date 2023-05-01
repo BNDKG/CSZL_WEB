@@ -9,34 +9,45 @@ app=Flask(__name__)
 @app.route('/')
 def show_homepage():
 
-    #if request.method == 'POST':
-    #    if request.form['submit_button'] == 'THING1':
-    #        print ("THING3")
 
-    df=pd.read_csv('savetest2018.csv')
+    try:
+        df=pd.read_csv('Today_NEXT_predict_withindex.csv')
     
-    table_html=df.to_html()
-    buffer="<html><body><h1>HOME</h1>\
-            <li><a href=\"/todayall\">SEE TODAY ALL</a></li>\
-            <li><a href=\"/todayhave\">SEE TODAY HAVE</a></li><br>\
-            <input type=\"submit\" name=\"submit_button\" value=\"THING1\">\
-            </body></html>".format(table_html)
+        table_html=df.to_html()
+        buffer="<html><body><h1>HOME</h1>\
+                <li><a href=\"/todayall\">SEE TODAY ALL</a></li>\
+                <li><a href=\"/todayhave\">SEE TODAY HAVE</a></li><br>\
+                </body></html>".format(table_html)
+
+    except:
+        buffer="something goes wrong!!!"
 
     return buffer
     
 
-@app.route('/todayall')
+@app.route('/todayall', methods=['GET', 'POST'])
 def show_todayall():
-    df=pd.read_csv('savetest2018.csv')
+
+    if request.method == 'POST':
+        if request.form['inputdate'] == 'aaa':
+            print ("aaa")
+        else:
+            print ("bbb")
+
+    df=pd.read_csv('Today_NEXT_predict_withindex.csv')
     page_name="TODAY ALL"
     table_html=df.to_html()
-    buffer="<html><body><h1>{0}</h1><div>{1}</div><li><a href=\"/\">BACK</a></li></body></html>".format(page_name,table_html)
+    buffer="<html><body><h1>{0}</h1><div>{1}</div>\
+    <form method=\"post\">\
+    inputdate<input name = \"inputdate\" type = \"text\" class=\"text\">\
+    <button type=\"submit\">Do it!</button></form>\
+    <li><a href=\"/\">BACK</a></li></body></html>".format(page_name,table_html)
 
     return buffer
 
 @app.route('/todayhave')
 def show_todayhave():
-    df=pd.read_csv('savetest2018.csv')
+    df=pd.read_csv('Today_NEXT_predict_withindex.csv')
     page_name="TODAY HAVE"
     table_html=df.to_html()
     buffer="<html><body><h1>{0}</h1><div>{1}</div><li><a href=\"/\">BACK</a></li></body></html>".format(page_name,table_html)
@@ -44,7 +55,7 @@ def show_todayhave():
     return buffer
 
 def order(method,inputpath,ordercol):
-    outputname='savetest2019.csv'
+    outputname='Today_NEXT_predict_changed.csv'
     
     df=pd.read_csv('savetest2018.csv')
     df2=df.sort_values('vol',ascending=method)

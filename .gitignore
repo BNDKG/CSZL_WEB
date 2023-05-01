@@ -159,3 +159,7 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 *.csv
+/.vs
+/CSZL_WEB/Backup
+/CSZL_WEB/.vs/CSZL_WEB/v16
+/CSZL_WEB/UpgradeLog.htm
